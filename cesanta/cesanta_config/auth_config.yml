@@ -1,0 +1,57 @@
+
+# A simple example. See reference.yml for explanation for explanation of all options.
+#
+#  auth:
+#    token:
+#      realm: "https://127.0.0.1:5001/auth"
+#      service: "Docker registry"
+#      issuer: "Acme auth server"
+#      rootcertbundle: "/path/to/server.pem"
+
+server:
+  addr: ":5001"
+  certificate: "/ssl/certificate.pem"
+  key: "/ssl/key.pem"
+
+token:
+  issuer: "Acme auth server"  # Must match issuer in the Registry config.
+  expiration: 900
+
+mongo_auth:
+  dial_info:
+    addrs: ["mongo:27017"]
+    timeout: "10s"
+    database: "API"
+    username: ""
+    password_file: ""
+    enable_tls: false
+  collection: "users"
+
+acl_mongo:
+  dial_info:
+    addrs: ["mongo:27017"]
+    timeout: "10s"
+    database: "API"
+    username: ""
+    password_file: ""
+    enable_tls: false
+  collection: "acl"
+  cache_ttl: "10s"
+
+#users:
+#  # Password is specified as a BCrypt hash. Use `htpasswd -nB USERNAME` to generate.
+#  "admin":
+#    password: "$2y$05$LO.vzwpWC5LZGqThvEfznu8qhb5SGqvBSWY1J3yZ4AxtMRZ3kN5jC"  # badmin
+#  "test":
+#    password: "$2y$05$WuwBasGDAgr.QCbGIjKJaep4dhxeai9gNZdmBnQXqpKly57oNutya"  # 123
+
+#acl:
+#  - match: {account: "admin"}
+#    actions: ["*"]
+#    comment: "Admin has full access to everything."
+#  - match: {account: "user"}
+#    actions: ["pull"]
+#    comment: "User \"user\" can pull stuff."
+#  - match: {account: "mokando"}
+#    actions: ["push"]
+#    comment: "User \"mokando\" can push stuff."

@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+    - 27017:27017
+    volumes:
+    - ./mongo/data:/data/db
+    - ./mongo/conf:/conf
+    #environment:
+    #  MONGO_INITDB_ROOT_USERNAME: root
+    #  MONGO_INITDB_ROOT_PASSWORD: example
+  cesanta:
+    depends_on:
+    - mongo
+    - registry
+    image: cesanta/docker_auth
+    ports:
+    - 5001:5001
+    volumes:
+    - ./ssl:/ssl
+    - ./cesanta/cesanta_config:/config 
+    - ./cesanta/cesanta_logs:/logs
+  registry:
+    restart: always
+    image: registry:2
+    ports:
+    - 5000:5000
+    environment:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/certificate.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/key.pem
+    volumes:
+    - ./ssl:/certs
+    - ./registry/registry_data:/var/lib/registry
+    - ./registry/registry_config:/etc/docker/registry/config.yml
